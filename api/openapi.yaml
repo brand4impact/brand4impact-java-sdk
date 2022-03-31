@@ -1,0 +1,5708 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@brand4impact.com
+    name: Brand4Impact
+    url: http://www.brand4impact.com
+  description: "Este contrato se usara para generar los clientes con todos los servicios\
+    \ necesarios.\n\n`!Uso exclusivo interno!`\n             \n---\n"
+  license:
+    name: Privacy policy
+    url: https://www.brand4impact.com/terms.html#privacy/
+  termsOfService: https://www.brand4impact.com/terms.html#ong/
+  title: Total API Reference
+  version: 0.0.1
+servers:
+- description: rest module
+  url: http://localhost:8080/backend
+tags:
+- description: A project is an initiative of an NGO to carry out activities of social
+    interest
+  externalDocs:
+    description: find out more
+    url: http://localhost:8080/backend/blog/guides#gestion_proyectos
+  name: Project
+- description: Assets refers to static files in the application (files, pdf, images,
+    etc)
+  externalDocs:
+    description: find out more
+    url: http://localhost:8080/backend/blog/guides
+  name: Asset
+- description: Topics refer to the 17 SDG sustainable development goals
+  externalDocs:
+    description: find out more
+    url: http://localhost:8080/backend/blog/guides#temas
+  name: Topic
+- description: Sectors refers to the main industries that exist (transportation, construction,
+    finance, marketing, etc).
+  externalDocs:
+    description: find out more
+    url: http://localhost:8080/backend/blog/guides#sectores
+  name: Sector
+- description: Vouchers referts to the amount of money that a person can donate to
+    a project
+  externalDocs:
+    description: find out more
+    url: http://localhost:8080/backend/blog/guides#gestion_vouchers
+  name: Voucher
+- description: User core business processes
+  externalDocs:
+    description: find out more
+    url: http://localhost:8080/backend/blog/guides#gestion_usuarios
+  name: User
+- description: A NGO is a non-profit organization that operates independently of any
+    government
+  externalDocs:
+    description: find out more
+    url: http://localhost:8080/backend/blog/guides#primeros_pasos
+  name: Ngo
+- description: A campaign is the mechanism that a company has to establish its CSR
+    strategy
+  externalDocs:
+    description: find out more
+    url: http://localhost:8080/backend/blog/guides#gestion_campañas
+  name: Campaign
+- description: Utils refer to values pre-established in the API
+  externalDocs:
+    description: find out more
+    url: http://localhost:8080/backend/blog/guides#utils
+  name: Utils
+- description: A company is the non-human legal entity
+  externalDocs:
+    description: find out more
+    url: http://localhost:8080/backend/blog/guides#primeros_pasos
+  name: Company
+- description: Invoices issued by a company or NGO
+  externalDocs:
+    description: find out more
+    url: http://localhost:8080/backend/blog/guides
+  name: Invoice
+- description: Security core business processes
+  name: Security
+paths:
+  /rest/platform/user/{token}:
+    get:
+      description: |-
+        This method returns a specific user within your tenant
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: getUser
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformUser'
+          description: A summary of a user settings
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Get a single user
+      tags:
+      - User
+      x-accepts: application/json
+    post:
+      description: |-
+        This method activate an invited user in the Company/NGO
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: confirmUser
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformUserConfirmWrapper'
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformUser'
+          description: A summary of a new user settings
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      summary: Activate a user
+      tags:
+      - User
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+    put:
+      description: |-
+        This method updates personal data for a user
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: updateUser
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformUserUpdateWrapper'
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformUser'
+          description: A summary of an updated user settings
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Update user data
+      tags:
+      - User
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+  /rest/platform/user/{token}/switch:
+    put:
+      description: |-
+        This method updates the user status, possible values are: active|inactive
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: switchUser
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformUser'
+          description: A summary of a user settings, updated by status
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Switch user's status
+      tags:
+      - User
+      x-accepts: application/json
+  /rest/platform/user/{token}/ext:
+    put:
+      description: |-
+        This method updates sensitive user data
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: updateUserExt
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformUserUpdateExtWrapper'
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformUser'
+          description: A summary of an updated admin user settings
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Update sensitive user data
+      tags:
+      - User
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+  /rest/platform/user/{token}/changepassword:
+    put:
+      description: |-
+        This method updates the password of a specific user
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: changeUserPassword
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformUserChangePasswordWrapper'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformUser'
+          description: A summary of a user settings
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      summary: Change user's password
+      tags:
+      - User
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+  /rest/platform/user/resetpassword:
+    put:
+      description: |-
+        This method reset the password of a specific user by sending an email to the user with a link to reset the password
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: resetUserPassword
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformUserResetPasswordWrapper'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformUser'
+          description: A summary of a user settings
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      summary: Reset user's password
+      tags:
+      - User
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+  /rest/platform/project/{token}:
+    get:
+      description: |-
+        This method returns a specific project within your tenant
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: getProject
+      parameters:
+      - description: The unique token for the campaign.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformProject'
+          description: A summary of a project's settings and content
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Get a single project
+      tags:
+      - Project
+      x-accepts: application/json
+    put:
+      description: |-
+        This method updates an existing project
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: updateProject
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformProjectUpdateWrapper'
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformProject'
+          description: A summary of a project's settings and content
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Update a project
+      tags:
+      - Project
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+  /rest/platform/project/{token}/switch:
+    put:
+      description: |-
+        This method switch the status of a specific project
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: switchProject
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformProject'
+          description: A summary of a project's settings and content, updated by status
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Switch project status
+      tags:
+      - Project
+      x-accepts: application/json
+  /rest/platform/ngo:
+    get:
+      description: |-
+        This method returns the NGO inside your tenant (theres no need to know the NGO token)
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: getNgo
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformNgo'
+          description: A summary of a NGO's settings and content
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Get your NGO
+      tags:
+      - Ngo
+      x-accepts: application/json
+    post:
+      description: Register a new NGO allows you to have visibiliy that your NGO deserves,
+        being visible to brand4impact users, and opting for their donations
+      operationId: createNgo
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformNgoCreateWrapper'
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformNgo'
+          description: A summary of a new NGO's settings and content
+      summary: Create a new NGO
+      tags:
+      - Ngo
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+    put:
+      description: |-
+        This method updates any data for the NGO
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: updateNgo
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformNgoUpdateWrapper'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformNgo'
+          description: A summary of a NGO's settings and content
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Update NGO data
+      tags:
+      - Ngo
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+  /rest/platform/ngo/upload:
+    put:
+      description: |-
+        This method uploads documentation (files, images, ...) of a NGO
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: uploadNgoFiles
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformNgoUploadFilesWrapper'
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformNgo'
+          description: A summary of a NGO's settings and content, updated by files
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Upload NGO files
+      tags:
+      - Ngo
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+  /rest/platform/ngo/legal:
+    put:
+      description: |-
+        This method updates the legal info for your NGO
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: updateNgoLegal
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformNgoUpdateLegalWrapper'
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformNgo'
+          description: A summary of a NGO's settings and content, updated by legal
+            info
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Update legal NGO info
+      tags:
+      - Ngo
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+  /rest/platform/ngo/bank:
+    put:
+      description: |-
+        This method updates the bank info for your NGO
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: updateNgoBank
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformNgoUpdateBankWrapper'
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformNgo'
+          description: A summary of a NGO's settings and content, updated by bank
+            info
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Update bank NGO info
+      tags:
+      - Ngo
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+  /rest/platform/company:
+    get:
+      description: |-
+        This method returns the Company inside your tenant (theres no need to know the Company token)
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: getCompany
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformCompany'
+          description: A summary of a company's settings and content
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Get your Company
+      tags:
+      - Company
+      x-accepts: application/json
+    post:
+      description: Register a new company allows you to start to have visibility that
+        your deserves, being visible to brand4impact users and opting to donate among
+        a bunch of projects
+      operationId: createCompany
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformCompanyCreateWrapper'
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformCompany'
+          description: A summary of a new company's settings and content
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      summary: Create a new Company
+      tags:
+      - Company
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+    put:
+      description: |-
+        This method updates any data for the Company
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: updateCompany
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformCompanyUpdateWrapper'
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformCompany'
+          description: A summary of an updated company's settings and content
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Update Company data
+      tags:
+      - Company
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+  /rest/platform/company/topic:
+    put:
+      description: |-
+        This method updates to which topics they can donate the vouchers of their campaigns
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: updateCompanyTopic
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformCompanyUpdateTopicWrapper'
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformCompany'
+          description: A summary of a company's settings and content, updated by topic
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Update selected topics for your Company
+      tags:
+      - Company
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+  /rest/platform/company/legal:
+    put:
+      description: |-
+        This method updates the legal info for your Company
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: updateCompanyLegal
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformCompanyUpdateLegalWrapper'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformCompany'
+          description: A summary of a company's settings and content, updated by legal
+            settings
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Update legal Company info
+      tags:
+      - Company
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+  /rest/platform/campaign/{token}:
+    get:
+      description: |-
+        This method returns a specific campaign within your tenant
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: getCampaign
+      parameters:
+      - description: The unique token for the campaign.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformCampaign'
+          description: A summary of a campaign's settings and content
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Get a single campaign
+      tags:
+      - Campaign
+      x-accepts: application/json
+    put:
+      description: |-
+        This method updates an existing campaign
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: updateCampaign
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformCampaignUpdateWrapper'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformCampaign'
+          description: A summary of an updated campaign's settings and content
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Update a campaign
+      tags:
+      - Campaign
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+  /rest/platform/campaign/{token}/switch:
+    put:
+      description: |-
+        This method switch the status of a specific campaign
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: switchCampaign
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformCampaign'
+          description: A summary of an campaign's settings and content, updated by
+            status
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Switch campaign status
+      tags:
+      - Campaign
+      x-accepts: application/json
+  /rest/platform/user/invite:
+    post:
+      description: |-
+        This method invites a user to join a Company/NGO
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: inviteUser
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformUserInviteWrapper'
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformUser'
+          description: A summary of a new user settings
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Invite a new user
+      tags:
+      - User
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+  /rest/platform/project:
+    get:
+      description: |-
+        This method returns a set of projects within your tenant
+
+
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)[![pagination](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/brackets.png 'pagination')](http://localhost:8080/backend/blog/home#pagination)
+      operationId: getProjects
+      parameters:
+      - explode: true
+        in: query
+        name: descriptionLike
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The country
+        explode: true
+        in: query
+        name: country
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The topicToken
+        explode: true
+        in: query
+        name: topicToken
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: 'The number of the page. Possible values: 0 to unlimited'
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: 'The number of items inside a page. Possible values: 1 to 100'
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: 'The order direction for sorted results. Possible values: ASC
+          or DESC'
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformProjectItemWrapper'
+          description: An array of projects
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Get a set of projects
+      tags:
+      - Project
+      x-accepts: application/json
+    post:
+      description: |-
+        This method creates a new project within a NGO
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: createProject
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformProjectCreateWrapper'
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformProject'
+          description: A summary of a new project's settings and content
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Create a new project
+      tags:
+      - Project
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+  /rest/platform/campaign:
+    get:
+      description: |-
+        This method returns a set of campaigns within your tenant
+
+
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)[![pagination](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/brackets.png 'pagination')](http://localhost:8080/backend/blog/home#pagination)
+      operationId: getCampaigns
+      parameters:
+      - description: The name of the filter
+        explode: true
+        in: query
+        name: titleFilter
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: 'The number of the page. Possible values: 0 to unlimited'
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: 'The number of items inside a page. Possible values: 1 to 100'
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: 'The order direction for sorted results. Possible values: ASC
+          or DESC'
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformCampaignItemWrapper'
+          description: An array of campaigns
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Get a set of campaigns
+      tags:
+      - Campaign
+      x-accepts: application/json
+    post:
+      description: |-
+        This method creates a new campaign within a Company
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: createCampaign
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlatformCampaignCreateWrapper'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformCampaign'
+          description: A summary of a new campaign's settings and content
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Create a new campaign
+      tags:
+      - Campaign
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+  /security/jwt:
+    get:
+      operationId: getJWTToken
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityUser'
+          description: security user info
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: unauthorized
+      security:
+      - BasicAuthentication: []
+      summary: get JWT token
+      tags:
+      - Security
+      x-accepts: application/json
+  /rest/platform/voucher/{token}:
+    get:
+      description: |-
+        This method returns a specific voucher within your tenant
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: getVoucher
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformVoucher'
+          description: A summary of a voucher's settings and content
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Get a single voucher
+      tags:
+      - Voucher
+      x-accepts: application/json
+  /rest/platform/voucher/{token}/qr:
+    get:
+      description: |-
+        This method returns a QR image of the voucher within your tenant to be able to access the donation graphically
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: downloadVoucherQr
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "204":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: No a QR file
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: A QR file
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Download the voucher QR image
+      tags:
+      - Voucher
+      x-accepts: application/json
+  /rest/platform/voucher/campaign/{campaignToken}:
+    get:
+      description: |-
+        This method returns a set of vouchers within your tenant
+
+
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)[![pagination](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/brackets.png 'pagination')](http://localhost:8080/backend/blog/home#pagination)
+      operationId: getVouchers
+      parameters:
+      - description: The unique token for the campaign.
+        explode: false
+        in: path
+        name: campaignToken
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 'The status of the voucher. Possible values: Active or Inactive'
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Min value of the voucher
+        explode: true
+        in: query
+        name: min
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: Max value of the voucher
+        explode: true
+        in: query
+        name: max
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: 'The number of the page. Possible values: 0 to unlimited'
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: 'The number of items inside a page. Possible values: 1 to 100'
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformVoucherItemWrapper'
+          description: A list of vouchers associated to a campaign
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Get a set of vouchers
+      tags:
+      - Voucher
+      x-accepts: application/json
+  /rest/platform/voucher/campaign/{campaignToken}/qr:
+    get:
+      description: |-
+        This method returns a set of voucher QR images within your tenant
+
+
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)[![pagination](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/brackets.png 'pagination')](http://localhost:8080/backend/blog/home#pagination)
+      operationId: downloadVouchersQr
+      parameters:
+      - description: The unique token for the campaign.
+        explode: false
+        in: path
+        name: campaignToken
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 'The status of the voucher. Possible values: Active or Inactive'
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Min value of the voucher
+        explode: true
+        in: query
+        name: min
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: Max value of the voucher
+        explode: true
+        in: query
+        name: max
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "204":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: No a QR file
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: A QR file
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Download a set of voucher QR images
+      tags:
+      - Voucher
+      x-accepts: application/json
+  /rest/platform/voucher/campaign/{campaignToken}/file:
+    get:
+      description: |-
+        This method returns a set of voucher's links file within your tenant
+
+
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)[![pagination](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/brackets.png 'pagination')](http://localhost:8080/backend/blog/home#pagination)
+      operationId: downloadVouchersFile
+      parameters:
+      - description: The unique token for the campaign.
+        explode: false
+        in: path
+        name: campaignToken
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 'The status of the voucher. Possible values: Active or Inactive'
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Min value of the voucher
+        explode: true
+        in: query
+        name: min
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: Max value of the voucher
+        explode: true
+        in: query
+        name: max
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        "204":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: No a link
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: A link
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Download a set of voucher's links file
+      tags:
+      - Voucher
+      x-accepts: application/json
+  /rest/platform/utils/zone:
+    get:
+      description: This method returns all the zones available, you can indicate a
+        locale to do the search
+      operationId: getZones
+      parameters:
+      - description: List of zones
+        explode: true
+        in: query
+        name: language
+        required: true
+        schema:
+          enum:
+          - ab
+          - aa
+          - af
+          - ak
+          - sq
+          - am
+          - ar
+          - an
+          - hy
+          - as
+          - av
+          - ae
+          - ay
+          - az
+          - bm
+          - ba
+          - eu
+          - be
+          - bn
+          - bh
+          - bi
+          - bs
+          - br
+          - bg
+          - my
+          - ca
+          - ch
+          - ce
+          - zh
+          - cu
+          - cv
+          - kw
+          - co
+          - cr
+          - hr
+          - cs
+          - da
+          - dv
+          - nl
+          - dz
+          - en
+          - eo
+          - et
+          - ee
+          - fo
+          - fj
+          - fi
+          - fr
+          - fy
+          - ff
+          - gl
+          - lg
+          - ka
+          - de
+          - el
+          - kl
+          - gn
+          - gu
+          - ht
+          - ha
+          - he
+          - hz
+          - hi
+          - ho
+          - hu
+          - is
+          - io
+          - ig
+          - id
+          - ia
+          - ie
+          - iu
+          - ik
+          - ga
+          - it
+          - ja
+          - jv
+          - kn
+          - kr
+          - ks
+          - kk
+          - km
+          - ki
+          - rw
+          - ky
+          - kv
+          - kg
+          - ko
+          - ku
+          - kj
+          - lo
+          - la
+          - lv
+          - li
+          - ln
+          - lt
+          - lu
+          - lb
+          - mk
+          - mg
+          - ms
+          - ml
+          - mt
+          - gv
+          - mi
+          - mr
+          - mh
+          - mo
+          - mn
+          - na
+          - nv
+          - ng
+          - ne
+          - nd
+          - se
+          - "no"
+          - nb
+          - nn
+          - ny
+          - oc
+          - oj
+          - or
+          - om
+          - os
+          - pi
+          - pa
+          - fa
+          - pl
+          - pt
+          - ps
+          - qu
+          - rm
+          - ro
+          - rn
+          - ru
+          - sm
+          - sg
+          - sa
+          - sc
+          - gd
+          - sr
+          - sn
+          - ii
+          - sd
+          - si
+          - sk
+          - sl
+          - so
+          - nr
+          - st
+          - es
+          - su
+          - sw
+          - ss
+          - sv
+          - tl
+          - ty
+          - tg
+          - ta
+          - tt
+          - te
+          - th
+          - bo
+          - ti
+          - to
+          - ts
+          - tn
+          - tr
+          - tk
+          - tw
+          - ug
+          - uk
+          - ur
+          - uz
+          - ve
+          - vi
+          - vo
+          - wa
+          - cy
+          - wo
+          - xh
+          - ji
+          - yo
+          - za
+          - zu
+          type: string
+        style: form
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PlatformZone'
+                type: array
+          description: A summary of zones
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      summary: Get zones
+      tags:
+      - Utils
+      x-accepts: application/json
+  /rest/platform/utils/roles:
+    get:
+      description: This method returns all the roles available, you can indicate a
+        locale to do the search
+      operationId: getRoles
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PlatformRole'
+                type: array
+          description: 'A summary of roles '
+      summary: Get roles
+      tags:
+      - Utils
+      x-accepts: application/json
+  /rest/platform/utils/language:
+    get:
+      description: This method returns all the languages available, you can indicate
+        a locale to do the search
+      operationId: getLanguages
+      parameters:
+      - description: List of languages
+        explode: true
+        in: query
+        name: language
+        required: true
+        schema:
+          enum:
+          - ab
+          - aa
+          - af
+          - ak
+          - sq
+          - am
+          - ar
+          - an
+          - hy
+          - as
+          - av
+          - ae
+          - ay
+          - az
+          - bm
+          - ba
+          - eu
+          - be
+          - bn
+          - bh
+          - bi
+          - bs
+          - br
+          - bg
+          - my
+          - ca
+          - ch
+          - ce
+          - zh
+          - cu
+          - cv
+          - kw
+          - co
+          - cr
+          - hr
+          - cs
+          - da
+          - dv
+          - nl
+          - dz
+          - en
+          - eo
+          - et
+          - ee
+          - fo
+          - fj
+          - fi
+          - fr
+          - fy
+          - ff
+          - gl
+          - lg
+          - ka
+          - de
+          - el
+          - kl
+          - gn
+          - gu
+          - ht
+          - ha
+          - he
+          - hz
+          - hi
+          - ho
+          - hu
+          - is
+          - io
+          - ig
+          - id
+          - ia
+          - ie
+          - iu
+          - ik
+          - ga
+          - it
+          - ja
+          - jv
+          - kn
+          - kr
+          - ks
+          - kk
+          - km
+          - ki
+          - rw
+          - ky
+          - kv
+          - kg
+          - ko
+          - ku
+          - kj
+          - lo
+          - la
+          - lv
+          - li
+          - ln
+          - lt
+          - lu
+          - lb
+          - mk
+          - mg
+          - ms
+          - ml
+          - mt
+          - gv
+          - mi
+          - mr
+          - mh
+          - mo
+          - mn
+          - na
+          - nv
+          - ng
+          - ne
+          - nd
+          - se
+          - "no"
+          - nb
+          - nn
+          - ny
+          - oc
+          - oj
+          - or
+          - om
+          - os
+          - pi
+          - pa
+          - fa
+          - pl
+          - pt
+          - ps
+          - qu
+          - rm
+          - ro
+          - rn
+          - ru
+          - sm
+          - sg
+          - sa
+          - sc
+          - gd
+          - sr
+          - sn
+          - ii
+          - sd
+          - si
+          - sk
+          - sl
+          - so
+          - nr
+          - st
+          - es
+          - su
+          - sw
+          - ss
+          - sv
+          - tl
+          - ty
+          - tg
+          - ta
+          - tt
+          - te
+          - th
+          - bo
+          - ti
+          - to
+          - ts
+          - tn
+          - tr
+          - tk
+          - tw
+          - ug
+          - uk
+          - ur
+          - uz
+          - ve
+          - vi
+          - vo
+          - wa
+          - cy
+          - wo
+          - xh
+          - ji
+          - yo
+          - za
+          - zu
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PlatformLanguage'
+                type: array
+          description: A summary of languages
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      summary: Get languages
+      tags:
+      - Utils
+      x-accepts: application/json
+  /rest/platform/utils/currency:
+    get:
+      description: This method returns all the currencies available, you can indicate
+        a locale to do the search
+      operationId: getCurrencies
+      parameters:
+      - description: List of currencies
+        explode: true
+        in: query
+        name: language
+        required: true
+        schema:
+          enum:
+          - ab
+          - aa
+          - af
+          - ak
+          - sq
+          - am
+          - ar
+          - an
+          - hy
+          - as
+          - av
+          - ae
+          - ay
+          - az
+          - bm
+          - ba
+          - eu
+          - be
+          - bn
+          - bh
+          - bi
+          - bs
+          - br
+          - bg
+          - my
+          - ca
+          - ch
+          - ce
+          - zh
+          - cu
+          - cv
+          - kw
+          - co
+          - cr
+          - hr
+          - cs
+          - da
+          - dv
+          - nl
+          - dz
+          - en
+          - eo
+          - et
+          - ee
+          - fo
+          - fj
+          - fi
+          - fr
+          - fy
+          - ff
+          - gl
+          - lg
+          - ka
+          - de
+          - el
+          - kl
+          - gn
+          - gu
+          - ht
+          - ha
+          - he
+          - hz
+          - hi
+          - ho
+          - hu
+          - is
+          - io
+          - ig
+          - id
+          - ia
+          - ie
+          - iu
+          - ik
+          - ga
+          - it
+          - ja
+          - jv
+          - kn
+          - kr
+          - ks
+          - kk
+          - km
+          - ki
+          - rw
+          - ky
+          - kv
+          - kg
+          - ko
+          - ku
+          - kj
+          - lo
+          - la
+          - lv
+          - li
+          - ln
+          - lt
+          - lu
+          - lb
+          - mk
+          - mg
+          - ms
+          - ml
+          - mt
+          - gv
+          - mi
+          - mr
+          - mh
+          - mo
+          - mn
+          - na
+          - nv
+          - ng
+          - ne
+          - nd
+          - se
+          - "no"
+          - nb
+          - nn
+          - ny
+          - oc
+          - oj
+          - or
+          - om
+          - os
+          - pi
+          - pa
+          - fa
+          - pl
+          - pt
+          - ps
+          - qu
+          - rm
+          - ro
+          - rn
+          - ru
+          - sm
+          - sg
+          - sa
+          - sc
+          - gd
+          - sr
+          - sn
+          - ii
+          - sd
+          - si
+          - sk
+          - sl
+          - so
+          - nr
+          - st
+          - es
+          - su
+          - sw
+          - ss
+          - sv
+          - tl
+          - ty
+          - tg
+          - ta
+          - tt
+          - te
+          - th
+          - bo
+          - ti
+          - to
+          - ts
+          - tn
+          - tr
+          - tk
+          - tw
+          - ug
+          - uk
+          - ur
+          - uz
+          - ve
+          - vi
+          - vo
+          - wa
+          - cy
+          - wo
+          - xh
+          - ji
+          - yo
+          - za
+          - zu
+          type: string
+        style: form
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PlatformCurrency'
+                type: array
+          description: A summary of currencies
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      summary: Get currencies
+      tags:
+      - Utils
+      x-accepts: application/json
+  /rest/platform/utils/country:
+    get:
+      description: This method returns all the countries available, you can indicate
+        a locale to do the search
+      operationId: getCountries
+      parameters:
+      - description: List of countries
+        explode: true
+        in: query
+        name: language
+        required: true
+        schema:
+          enum:
+          - ab
+          - aa
+          - af
+          - ak
+          - sq
+          - am
+          - ar
+          - an
+          - hy
+          - as
+          - av
+          - ae
+          - ay
+          - az
+          - bm
+          - ba
+          - eu
+          - be
+          - bn
+          - bh
+          - bi
+          - bs
+          - br
+          - bg
+          - my
+          - ca
+          - ch
+          - ce
+          - zh
+          - cu
+          - cv
+          - kw
+          - co
+          - cr
+          - hr
+          - cs
+          - da
+          - dv
+          - nl
+          - dz
+          - en
+          - eo
+          - et
+          - ee
+          - fo
+          - fj
+          - fi
+          - fr
+          - fy
+          - ff
+          - gl
+          - lg
+          - ka
+          - de
+          - el
+          - kl
+          - gn
+          - gu
+          - ht
+          - ha
+          - he
+          - hz
+          - hi
+          - ho
+          - hu
+          - is
+          - io
+          - ig
+          - id
+          - ia
+          - ie
+          - iu
+          - ik
+          - ga
+          - it
+          - ja
+          - jv
+          - kn
+          - kr
+          - ks
+          - kk
+          - km
+          - ki
+          - rw
+          - ky
+          - kv
+          - kg
+          - ko
+          - ku
+          - kj
+          - lo
+          - la
+          - lv
+          - li
+          - ln
+          - lt
+          - lu
+          - lb
+          - mk
+          - mg
+          - ms
+          - ml
+          - mt
+          - gv
+          - mi
+          - mr
+          - mh
+          - mo
+          - mn
+          - na
+          - nv
+          - ng
+          - ne
+          - nd
+          - se
+          - "no"
+          - nb
+          - nn
+          - ny
+          - oc
+          - oj
+          - or
+          - om
+          - os
+          - pi
+          - pa
+          - fa
+          - pl
+          - pt
+          - ps
+          - qu
+          - rm
+          - ro
+          - rn
+          - ru
+          - sm
+          - sg
+          - sa
+          - sc
+          - gd
+          - sr
+          - sn
+          - ii
+          - sd
+          - si
+          - sk
+          - sl
+          - so
+          - nr
+          - st
+          - es
+          - su
+          - sw
+          - ss
+          - sv
+          - tl
+          - ty
+          - tg
+          - ta
+          - tt
+          - te
+          - th
+          - bo
+          - ti
+          - to
+          - ts
+          - tn
+          - tr
+          - tk
+          - tw
+          - ug
+          - uk
+          - ur
+          - uz
+          - ve
+          - vi
+          - vo
+          - wa
+          - cy
+          - wo
+          - xh
+          - ji
+          - yo
+          - za
+          - zu
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PlatformCountry'
+                type: array
+          description: A summary of countries
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      summary: Get countries
+      tags:
+      - Utils
+      x-accepts: application/json
+  /rest/platform/user:
+    get:
+      description: |-
+        This method returns a set of users within your tenant
+
+
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)[![pagination](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/brackets.png 'pagination')](http://localhost:8080/backend/blog/home#pagination)
+      operationId: getUsers
+      parameters:
+      - description: The name of the filter
+        explode: true
+        in: query
+        name: firstnameLike
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: 'The number of the page. Possible values: 0 to unlimited'
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: 'The number of items inside a page. Possible values: 1 to 100'
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: 'The order direction for sorted results. Possible values: ASC
+          or DESC'
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformUserItemWrapper'
+          description: An array of users
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Get a set of users
+      tags:
+      - User
+      x-accepts: application/json
+  /rest/platform/topic:
+    get:
+      description: |-
+        This method returns all the topics according the filters
+
+        A topic refers to the 17th SDG objectives [(United Nations)](https://sdgs.un.org/goals)
+
+
+
+        [![pagination](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/brackets.png 'pagination')](http://localhost:8080/backend/blog/home#pagination)
+      operationId: getTopics
+      parameters:
+      - description: The name of the filter
+        explode: true
+        in: query
+        name: titleLike
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: 'The number of the page. Possible values: 0 to unlimited'
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: 'The number of items inside a page. Possible values: 1 to 100'
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: 'The order direction for sorted results. Possible values: ASC
+          or DESC'
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformTopicItemWrapper'
+          description: An array of topics
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      summary: Get a set of topics
+      tags:
+      - Topic
+      x-accepts: application/json
+  /rest/platform/topic/{token}:
+    get:
+      description: |+
+        This method returns a specific topic
+
+        A topic refers to the 17th SDG objectives [(United Nations)](https://sdgs.un.org/goals)
+
+      operationId: getTopic
+      parameters:
+      - description: The unique token for the topic.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformTopic'
+          description: A topic
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      summary: Get a single topic
+      tags:
+      - Topic
+      x-accepts: application/json
+  /rest/platform/sector:
+    get:
+      description: |-
+        This method returns all the sectors according the filters and represents principals industries
+
+
+
+        [![pagination](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/brackets.png 'pagination')](http://localhost:8080/backend/blog/home#pagination)
+      operationId: getSectors
+      parameters:
+      - description: 'The number of the page. Possible values: 0 to unlimited'
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: 'The number of items inside a page. Possible values: 1 to 100'
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: 'The order direction for sorted results. Possible values: ASC
+          or DESC'
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformSectorItemWrapper'
+          description: An array of sectors
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      summary: Get a set of sectors
+      tags:
+      - Sector
+      x-accepts: application/json
+  /rest/platform/sector/{token}:
+    get:
+      description: |+
+        This method returns a specific sector and represents principals industries
+
+      operationId: getSector
+      parameters:
+      - description: The unique token for the sector.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformSector'
+          description: The name of the sector
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      summary: Get a single sector
+      tags:
+      - Sector
+      x-accepts: application/json
+  /rest/platform/invoice:
+    get:
+      description: |-
+        This method returns a set of invoices within your tenant
+
+
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)[![pagination](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/brackets.png 'pagination')](http://localhost:8080/backend/blog/home#pagination)
+      operationId: getInvoices
+      parameters:
+      - description: The name of the filter
+        explode: true
+        in: query
+        name: numberLike
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: 'The number of the page. Possible values: 0 to unlimited'
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: 'The number of items inside a page. Possible values: 1 to 100'
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: 'The order direction for sorted results. Possible values: ASC
+          or DESC'
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformInvoiceItemWrapper'
+          description: A summary of an invoice
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Get a set of invoices
+      tags:
+      - Invoice
+      x-accepts: application/json
+  /rest/platform/invoice/{token}:
+    get:
+      description: |-
+        This method returns a specific invoice within your tenant
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: getInvoice
+      parameters:
+      - explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformInvoice'
+          description: A summary of an invoice
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Get a single invoice
+      tags:
+      - Invoice
+      x-accepts: application/json
+  /rest/platform/asset:
+    get:
+      description: |-
+        This method returns a set of assets within your tenant (asset refers to static files, like images, pdf, ...)
+
+
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)[![pagination](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/brackets.png 'pagination')](http://localhost:8080/backend/blog/home#pagination)
+      operationId: getAssets
+      parameters:
+      - description: 'The number of the page. Possible values: 0 to unlimited'
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: 'The number of items inside a page. Possible values: 1 to 100'
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - description: 'The order direction for sorted results. Possible values: ASC
+          or DESC'
+        explode: true
+        in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformAssetItemWrapper'
+          description: An array of assets files
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Get a set of assets
+      tags:
+      - Asset
+      x-accepts: application/json
+  /rest/platform/asset/{token}:
+    get:
+      description: |-
+        This method returns a specific asset within your tenant (asset refers to static files, like images, pdf, ...)
+
+        [![security](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/shield-check.png 'security')](http://localhost:8080/backend/blog/home#seguridad)[![multi-tenant](https://b4i.ams3.digitaloceanspaces.com/statics/swagger/users.png 'multi-tenant')](http://localhost:8080/backend/blog/home#multitenant)
+      operationId: getAsset
+      parameters:
+      - description: The unique token for the asset.
+        explode: false
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Forbidden
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Validation exception
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Generic exception
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformAsset'
+          description: An asset file
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestError'
+          description: Unauthorized
+      security:
+      - BearerAuthentication: []
+      summary: Get a single asset
+      tags:
+      - Asset
+      x-accepts: application/json
+components:
+  schemas:
+    PlatformUserUpdate:
+      description: |
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__firstname<sup>*</sup>__: the first name</font>
+        + <font size=2>**lastname**: the last name</font>
+        + <font size=2>**email**: the email</font>
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+      type: object
+    PlatformUserUpdateWrapper:
+      properties:
+        user:
+          $ref: '#/components/schemas/PlatformUserUpdate'
+      required:
+      - user
+      type: object
+    RestError:
+      properties:
+        status:
+          format: int32
+          type: integer
+        error:
+          type: string
+        timestamp:
+          format: date-time
+          type: string
+        zone:
+          type: string
+        message:
+          type: string
+        details:
+          items:
+            type: string
+          type: array
+      type: object
+    PlatformUser:
+      example:
+        firstname: firstname
+        roles:
+        - roles
+        - roles
+        id: id
+        email: email
+        token: token
+        lastname: lastname
+        status: status
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        status:
+          type: string
+        roles:
+          items:
+            type: string
+          type: array
+      type: object
+    PlatformUserUpdateExt:
+      description: |
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__firstname<sup>*</sup>__: the first name</font>
+        + <font size=2>**lastname**: the last name</font>
+        + <font size=2>**email**: the email</font>
+        + <font size=2>**roles**: the roles you assign to the user. Possible values: see [Utils/Get user roles](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getRoles) to check the available roles
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        roles:
+          items:
+            type: string
+          type: array
+      required:
+      - roles
+      type: object
+    PlatformUserUpdateExtWrapper:
+      properties:
+        user:
+          $ref: '#/components/schemas/PlatformUserUpdateExt'
+      required:
+      - user
+      type: object
+    PlatformUserChangePassword:
+      description: |+
+        <font size=2>__password<sup>*</sup>__: the new password for the user</font>
+
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+      properties:
+        password:
+          type: string
+      type: object
+    PlatformUserChangePasswordWrapper:
+      properties:
+        user:
+          $ref: '#/components/schemas/PlatformUserChangePassword'
+      required:
+      - user
+      type: object
+    PlatformUserResetPassword:
+      description: |+
+        <font size=2>__email<sup>*</sup>__: the user's email to send instructions to reset the password</font>
+
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+      properties:
+        email:
+          type: string
+      type: object
+    PlatformUserResetPasswordWrapper:
+      properties:
+        user:
+          $ref: '#/components/schemas/PlatformUserResetPassword'
+      required:
+      - user
+      type: object
+    PlatformProjectUpdate:
+      description: |
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__title<sup>*</sup>__: the name</font>
+        + <font size=2>**description**: a description about</font>
+        + <font size=2>**startdate**: the date the project start to be available</font>
+        + <font size=2>**enddate**:  the date the project finish to be available</font>
+        + <font size=2>**videoUrl**: the url video related with the project</font>
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        startdate:
+          format: date-time
+          type: string
+        enddate:
+          format: date-time
+          type: string
+        videoUrl:
+          type: string
+      type: object
+    PlatformProjectUpdateWrapper:
+      properties:
+        project:
+          $ref: '#/components/schemas/PlatformProjectUpdate'
+        primaryImage:
+          format: binary
+          type: string
+        secondaryImage:
+          format: binary
+          type: string
+      required:
+      - primaryImage
+      - project
+      - secondaryImage
+      type: object
+    PlatformProject:
+      example:
+        primaryImageToken: primaryImageToken
+        enddate: 2000-01-23T04:56:07.000+00:00
+        secondaryImageToken: secondaryImageToken
+        videoUrl: videoUrl
+        description: description
+        currency: currency
+        id: id
+        title: title
+        startdate: 2000-01-23T04:56:07.000+00:00
+        token: token
+        status: status
+        budget: 0.8008281904610115
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        startdate:
+          format: date-time
+          type: string
+        enddate:
+          format: date-time
+          type: string
+        primaryImageToken:
+          type: string
+        secondaryImageToken:
+          type: string
+        videoUrl:
+          type: string
+        status:
+          type: string
+        budget:
+          format: double
+          type: number
+        currency:
+          type: string
+      type: object
+    PlatformNgoUpdate:
+      description: |
+        <font size=2>A **ngo** is a non-profit organization that operates independently of any government, typically one whose purpose is to address a social or political issue</font>
+
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__name<sup>*</sup>__: the name</font>
+        + <font size=2>**street**: the address (street)</font>
+        + <font size=2>**other**:  other address's relevant information</font>
+        + <font size=2>**postalcode**: the postal code</font>
+        + <font size=2>**city**: the city</font>
+        + <font size=2>**country**:  the country. See [Countries/Get Countries](http://localhost:8080/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getCountries) to check the available countries</font>
+
+        + <font size=2>**establishment**:  XXXXX</font>
+        + <font size=2>**website**: the web page</font>
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        name:
+          type: string
+        street:
+          type: string
+        other:
+          type: string
+        postalcode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        establishment:
+          format: date-time
+          type: string
+        website:
+          type: string
+      type: object
+    PlatformNgoUpdateWrapper:
+      properties:
+        ngo:
+          $ref: '#/components/schemas/PlatformNgoUpdate'
+        logo:
+          format: binary
+          type: string
+      required:
+      - logo
+      - ngo
+      type: object
+    PlatformNgo:
+      example:
+        website: website
+        address:
+          country: country
+          other: other
+          city: city
+          street: street
+          postalcode: postalcode
+        name: name
+        vat: vat
+        legal:
+          firstname: firstname
+          address:
+            country: country
+            other: other
+            city: city
+            street: street
+            postalcode: postalcode
+          nationality: nationality
+          brithday: 2000-01-23T04:56:07.000+00:00
+          nid: nid
+          residence: residence
+          email: email
+          token: token
+          lastname: lastname
+        files:
+        - files
+        - files
+        establishment: 2000-01-23T04:56:07.000+00:00
+        id: id
+        token: token
+        status: status
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        vat:
+          type: string
+        address:
+          $ref: '#/components/schemas/PlatformNgoAddress'
+        status:
+          type: string
+        establishment:
+          format: date-time
+          type: string
+        website:
+          type: string
+        legal:
+          $ref: '#/components/schemas/PlatformNgoLegal'
+        files:
+          items:
+            type: string
+          type: array
+      type: object
+    PlatformNgoAddress:
+      example:
+        country: country
+        other: other
+        city: city
+        street: street
+        postalcode: postalcode
+      properties:
+        street:
+          type: string
+        other:
+          type: string
+        postalcode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+      type: object
+    PlatformNgoLegal:
+      example:
+        firstname: firstname
+        address:
+          country: country
+          other: other
+          city: city
+          street: street
+          postalcode: postalcode
+        nationality: nationality
+        brithday: 2000-01-23T04:56:07.000+00:00
+        nid: nid
+        residence: residence
+        email: email
+        token: token
+        lastname: lastname
+      properties:
+        token:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        nid:
+          type: string
+        brithday:
+          format: date-time
+          type: string
+        nationality:
+          type: string
+        residence:
+          type: string
+        email:
+          type: string
+        address:
+          $ref: '#/components/schemas/PlatformNgoLegalAddress'
+      type: object
+    PlatformNgoLegalAddress:
+      example:
+        country: country
+        other: other
+        city: city
+        street: street
+        postalcode: postalcode
+      properties:
+        street:
+          type: string
+        other:
+          type: string
+        postalcode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+      type: object
+    PlatformNgoUploadFilesWrapper:
+      properties:
+        file:
+          format: binary
+          type: string
+      required:
+      - file
+      type: object
+    PlatformNgoUpdateLegal:
+      description: |
+        <font size=2>A **legal** is the human legal representative of the ngo</font>
+
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__nid<sup>*</sup>__: number ID (DNI/NIF)</font>
+        + <font size=2>**firstname**: the first name</font>
+        + <font size=2>**lastname**: the last name</font>
+        + <font size=2>**birthday**:  the birthday</font>
+        + <font size=2>**residence**: the tax residence</font>
+        + <font size=2>**nationality**: the nationality. See [Countries/Get Countries](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getCountries) to check the available countries</font>
+        + <font size=2>**email**:  the email</font>
+        + <font size=2>**street**: the adress</font>
+        + <font size=2>**other**:  other relevant information for the address</font>
+        + <font size=2>**postalcode**: the postal code</font>
+        + <font size=2>**city**: the city</font>
+        + <font size=2>**country**:  the country. See [Countries/Get Countries](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getCountries) to check the available countries</font>
+
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        nid:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        brithday:
+          format: date-time
+          type: string
+        residence:
+          type: string
+        nationality:
+          type: string
+        email:
+          type: string
+        street:
+          type: string
+        other:
+          type: string
+        postalcode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+      type: object
+    PlatformNgoUpdateLegalWrapper:
+      properties:
+        legal:
+          $ref: '#/components/schemas/PlatformNgoUpdateLegal'
+      required:
+      - legal
+      type: object
+    PlatformNgoUpdateBank:
+      description: |+
+        <font size=2>__iban<sup>*</sup>__: the International Bank Account Number</font>
+
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+      properties:
+        iban:
+          type: string
+      type: object
+    PlatformNgoUpdateBankWrapper:
+      properties:
+        bank:
+          $ref: '#/components/schemas/PlatformNgoUpdateBank'
+      required:
+      - bank
+      type: object
+    PlatformCompanyUpdate:
+      description: |
+        <font size=2>A **company** is a non-human legal entity that is not a single natural person, but an organization recognized by law as a legal person such as a corporation, government agency, etc.</font>
+
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__name<sup>*</sup>__: the name</font>
+        + <font size=2>**street**: the address (street)</font>
+        + <font size=2>**other**:  other address's relevant information</font>
+        + <font size=2>**postalcode**: the postal code</font>
+        + <font size=2>**city**: the cityy</font>
+        + <font size=2>**country**:  the country. See [Countries/Get Countries](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getCountries) to check the available countries</font>
+
+        + <font size=2>**sectorToken**: the sector token of the company. See [Sectors/Get Sectors](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Sector/getSectors) to check the available sectors</font>
+
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        name:
+          type: string
+        street:
+          type: string
+        other:
+          type: string
+        postalcode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        sectorToken:
+          type: string
+      required:
+      - sectorToken
+      type: object
+    PlatformCompanyUpdateWrapper:
+      properties:
+        company:
+          $ref: '#/components/schemas/PlatformCompanyUpdate'
+        logo:
+          format: binary
+          type: string
+      required:
+      - company
+      - logo
+      type: object
+    PlatformCompany:
+      example:
+        address:
+          country: country
+          other: other
+          city: city
+          street: street
+          postalcode: postalcode
+        sectorToken: sectorToken
+        name: name
+        vat: vat
+        legal:
+          firstname: firstname
+          address:
+            country: country
+            other: other
+            city: city
+            street: street
+            postalcode: postalcode
+          nationality: nationality
+          brithday: 2000-01-23T04:56:07.000+00:00
+          nid: nid
+          residence: residence
+          email: email
+          token: token
+          lastname: lastname
+        topicsToken:
+        - topicsToken
+        - topicsToken
+        id: id
+        token: token
+        status: status
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        vat:
+          type: string
+        status:
+          type: string
+        address:
+          $ref: '#/components/schemas/PlatformCompanyAddress'
+        legal:
+          $ref: '#/components/schemas/PlatformCompanyLegal'
+        sectorToken:
+          type: string
+        topicsToken:
+          items:
+            type: string
+          type: array
+      type: object
+    PlatformCompanyAddress:
+      example:
+        country: country
+        other: other
+        city: city
+        street: street
+        postalcode: postalcode
+      properties:
+        street:
+          type: string
+        other:
+          type: string
+        postalcode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+      type: object
+    PlatformCompanyLegal:
+      example:
+        firstname: firstname
+        address:
+          country: country
+          other: other
+          city: city
+          street: street
+          postalcode: postalcode
+        nationality: nationality
+        brithday: 2000-01-23T04:56:07.000+00:00
+        nid: nid
+        residence: residence
+        email: email
+        token: token
+        lastname: lastname
+      properties:
+        token:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        nid:
+          type: string
+        brithday:
+          format: date-time
+          type: string
+        nationality:
+          type: string
+        residence:
+          type: string
+        email:
+          type: string
+        address:
+          $ref: '#/components/schemas/PlatformCompanyLegalAddress'
+      type: object
+    PlatformCompanyLegalAddress:
+      example:
+        country: country
+        other: other
+        city: city
+        street: street
+        postalcode: postalcode
+      properties:
+        street:
+          type: string
+        other:
+          type: string
+        postalcode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+      type: object
+    PlatformCompanyUpdateTopic:
+      description: |
+        <font size=2>A **topic** is one of the 17th SDG objectives (i.e No poverty, Zero hunger, Good health and well-being, Quality education...)</font>
+
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        <font size=2>__topicTokens<sup>*</sup>__: the topic of the Company. See [Topics/Get Topics](http://localhost:8080/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Topic/getTopics) to check the available topics</font>
+
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        topicTokens:
+          items:
+            type: string
+          type: array
+      required:
+      - topicTokens
+      type: object
+    PlatformCompanyUpdateTopicWrapper:
+      properties:
+        sdg:
+          $ref: '#/components/schemas/PlatformCompanyUpdateTopic'
+      required:
+      - sdg
+      type: object
+    PlatformCompanyUpdateLegal:
+      description: |
+        <font size=2>A **legal** is the human legal representative of the company</font>
+
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__nid<sup>*</sup>__: number ID (DNI/NIF)</font>
+        + <font size=2>**firstname**: the first name </font>
+        + <font size=2>**lastname**: the last name</font>
+        + <font size=2>**birthday**:  the birthday</font>
+        + <font size=2>**residence**: the tax residence</font>
+        + <font size=2>**nationality**: nationality. See [Countries/Get Countries](http://localhost:8080/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getCountries) to check the available countries</font>
+        + <font size=2>**email**:  the email</font>
+        + <font size=2>**street**: the street</font>
+        + <font size=2>**other**:  other relevant information for the address</font>
+        + <font size=2>**postalcode**: the postal code</font>
+        + <font size=2>**city**: the city</font>
+        + <font size=2>**country**:  the country. See [Countries/Get Countries](http://localhost:8080/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getCountries) to check the available countries</font>
+
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        nid:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        brithday:
+          format: date-time
+          type: string
+        residence:
+          type: string
+        nationality:
+          type: string
+        email:
+          type: string
+        street:
+          type: string
+        other:
+          type: string
+        postalcode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+      type: object
+    PlatformCompanyUpdateLegalWrapper:
+      properties:
+        legal:
+          $ref: '#/components/schemas/PlatformCompanyUpdateLegal'
+      required:
+      - legal
+      type: object
+    PlatformCampaignUpdate:
+      description: |
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__title<sup>*</sup>__: the name</font>
+        + <font size=2>**description**: a description</font>
+        + <font size=2>**startdate**: the date the campaign start to be available</font>
+        + <font size=2>**enddate**:  the day the campaign ends to be available</font>
+        + <font size=2>**videoUrl**: the url video related with the campaign</font>
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        startdate:
+          format: date-time
+          type: string
+        enddate:
+          format: date-time
+          type: string
+        videoUrl:
+          type: string
+      type: object
+    PlatformCampaignUpdateWrapper:
+      properties:
+        campaign:
+          $ref: '#/components/schemas/PlatformCampaignUpdate'
+        primaryImage:
+          format: binary
+          type: string
+        secondaryImage:
+          format: binary
+          type: string
+      required:
+      - campaign
+      - primaryImage
+      - secondaryImage
+      type: object
+    PlatformCampaign:
+      example:
+        primaryImageToken: primaryImageToken
+        enddate: 2000-01-23T04:56:07.000+00:00
+        secondaryImageToken: secondaryImageToken
+        videoUrl: videoUrl
+        description: description
+        id: id
+        title: title
+        startdate: 2000-01-23T04:56:07.000+00:00
+        token: token
+        status: status
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        startdate:
+          format: date-time
+          type: string
+        enddate:
+          format: date-time
+          type: string
+        primaryImageToken:
+          type: string
+        secondaryImageToken:
+          type: string
+        videoUrl:
+          type: string
+        status:
+          type: string
+      type: object
+    PlatformUserConfirm:
+      description: |
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__firstname<sup>*</sup>__: the first name</font>
+        + <font size=2>**lastname**: the last name</font>
+        + <font size=2>**username**: the alias of the user in the platform</font>
+        + <font size=2>**password**:  the username's password to access the platform</font>
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+      type: object
+    PlatformUserConfirmWrapper:
+      properties:
+        user:
+          $ref: '#/components/schemas/PlatformUserConfirm'
+      required:
+      - user
+      type: object
+    PlatformUserInvite:
+      description: |
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__email<sup>*</sup>__: the email the person you want to invite to brand4impact platform</font>
+        + <font size=2>**roles**: the rol you assign to the person. Possible values: see [Utils/Get user roles](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getRoles) to check the available currencies
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        email:
+          type: string
+        roles:
+          items:
+            type: string
+          type: array
+      required:
+      - roles
+      type: object
+    PlatformUserInviteWrapper:
+      properties:
+        user:
+          $ref: '#/components/schemas/PlatformUserInvite'
+      required:
+      - user
+      type: object
+    PlatformProjectBudgetCreate:
+      properties:
+        value:
+          format: int32
+          type: integer
+        currency:
+          type: string
+      required:
+      - value
+      type: object
+    PlatformProjectCreate:
+      description: |
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__title<sup>*</sup>__: the name</font>
+        + <font size=2>**description**: a description about</font>
+        + <font size=2>**startdate**: the date the project start to be available</font>
+        + <font size=2>**enddate**:  the date the project finish to be available</font>
+        + <font size=2>**videoUrl**: the url video related with the project</font>
+        + <font size=2>**country**: the country. See [Countries/Get Countries](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getCountries) to check the available countries</font>
+        + <font size=2>**budget**:  the budget objective needed to achieve the project</font>
+            + **value**: the amount of money
+            + **currency**: the currency of the amount. See [Utils/Get Currencies](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getCurrencies) to check the available currencies
+        + <font size=2>**topicToken**: the topic token of the project. See [Topics/Get Topics](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Topic/getTopics) to check the available topics</font>
+
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        startdate:
+          format: date-time
+          type: string
+        enddate:
+          format: date-time
+          type: string
+        videoUrl:
+          type: string
+        country:
+          type: string
+        budget:
+          $ref: '#/components/schemas/PlatformProjectBudgetCreate'
+        topicToken:
+          type: string
+      required:
+      - topicToken
+      type: object
+    PlatformProjectCreateWrapper:
+      properties:
+        project:
+          $ref: '#/components/schemas/PlatformProjectCreate'
+        primaryImage:
+          format: binary
+          type: string
+        secondaryImage:
+          format: binary
+          type: string
+      required:
+      - primaryImage
+      - project
+      - secondaryImage
+      type: object
+    PlatformNgoCreate:
+      description: |
+        <font size=2>A **ngo** is a non-profit organization that operates independently of any government, typically one whose purpose is to address a social or political issue</font>
+
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__name<sup>*</sup>__: the name</font>
+        + <font size=2>**vat**: the unique identifier of the NGO (CIF)</font>
+        + <font size=2>**street**: the address (street)</font>
+        + <font size=2>**other**:  other address's relevant information</font>
+        + <font size=2>**postalcode**: the postal code</font>
+        + <font size=2>**city**: the city</font>
+        + <font size=2>**country**: the country. See [Countries/Get Countries](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getCountries) to check the available countries</font>
+        + <font size=2>**establishment**:  XXXXX</font>
+        + <font size=2>**website**: the web page</font>
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        name:
+          type: string
+        vat:
+          type: string
+        street:
+          type: string
+        other:
+          type: string
+        postalcode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        establishment:
+          format: date-time
+          type: string
+        website:
+          type: string
+      type: object
+    PlatformNgoCreateAdmin:
+      description: |
+        <font size=2>An **admin** is the person with fully granted privileges for managing the operative of the ngo in Brand4Impact</font>
+
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__nid<sup>*</sup>__: the number ID (DNI/NIF)</font>
+        + <font size=2>**firstname**: the first name</font>
+        + <font size=2>**lastname**: the last name</font>
+        + <font size=2>**birthday**:  the birthday</font>
+        + <font size=2>**residence**: the tax residence</font>
+        + <font size=2>**nationality**: the nationality. See [Countries/Get Countries](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getCountries) to check the available countries</font>
+        + <font size=2>**email**:  the email</font>
+        + <font size=2>**username**: the alias for the admin in the platform</font>
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        nid:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        brithday:
+          format: date-time
+          type: string
+        residence:
+          type: string
+        nationality:
+          type: string
+        email:
+          type: string
+        username:
+          type: string
+      type: object
+    PlatformNgoCreateLegal:
+      description: |
+        <font size=2>A **legal** is the human legal representative of the ngo</font>
+
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__nid<sup>*</sup>__: number ID (DNI/NIF)</font>
+        + <font size=2>**firstname**: the first name</font>
+        + <font size=2>**lastname**: the last name</font>
+        + <font size=2>**birthday**:  the birthday</font>
+        + <font size=2>**residence**: the tax residence</font>
+        + <font size=2>**nationality**: the nationality. See [Countries/Get Countries](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getCountries) to check the available countries</font>
+        + <font size=2>**email**:  the email</font>
+        + <font size=2>**street**: the adress</font>
+        + <font size=2>**other**:  other relevant information for the address</font>
+        + <font size=2>**postalcode**: the postal code</font>
+        + <font size=2>**city**: the city</font>
+        + <font size=2>**country**:  the country. See [Countries/Get Countries](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getCountries) to check the available countries</font>
+
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        nid:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        brithday:
+          format: date-time
+          type: string
+        residence:
+          type: string
+        nationality:
+          type: string
+        email:
+          type: string
+        street:
+          type: string
+        other:
+          type: string
+        postalcode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+      type: object
+    PlatformNgoCreateWrapper:
+      properties:
+        ngo:
+          $ref: '#/components/schemas/PlatformNgoCreate'
+        legal:
+          $ref: '#/components/schemas/PlatformNgoCreateLegal'
+        admin:
+          $ref: '#/components/schemas/PlatformNgoCreateAdmin'
+      required:
+      - admin
+      - legal
+      - ngo
+      type: object
+    PlatformCompanyCreate:
+      description: |
+        <font size=2>A **company** is a non-human legal entity that is not a single natural person, but an organization recognized by law as a legal person such as a corporation, government agency, etc.</font>
+
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__name<sup>*</sup>__: the name</font>
+        + <font size=2>**vat**: the unique identifier of the company (CIF)</font>
+        + <font size=2>**street**: the street</font>
+        + <font size=2>**other**:  other relevant information for the company address</font>
+        + <font size=2>**postalcode**: the postal code</font>
+        + <font size=2>**city**: the city</font>
+        + <font size=2>**country**: the country. See [Countries/Get Countries](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getCountries) to check the available countries</font>
+        + <font size=2>**sectorToken**: the sector token of the company. See [Sectors/Get Sectors](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Sector/getSectors) to check the available sectors</font>
+
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        name:
+          type: string
+        vat:
+          type: string
+        street:
+          type: string
+        other:
+          type: string
+        postalcode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        sectorToken:
+          type: string
+      required:
+      - sectorToken
+      type: object
+    PlatformCompanyCreateAdmin:
+      description: |
+        <font size=2>An **admin** is the person with fully granted privileges for managing the operative of the company in Brand4Impact</font>
+
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__nid<sup>*</sup>__: the number ID (DNI/NIF)</font>
+        + <font size=2>**firstname**: the first name</font>
+        + <font size=2>**lastname**: the last name</font>
+        + <font size=2>**birthday**:  the birthday</font>
+        + <font size=2>**residence**: the tax residence </font>
+        + <font size=2>**nationality**: the nationality. See [Countries/Get Countries](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getCountries) to check the available countries</font>
+        + <font size=2>**email**:  the email</font>
+        + <font size=2>**username**: the alias for the admin in the platform</font>
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        nid:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        brithday:
+          format: date-time
+          type: string
+        residence:
+          type: string
+        nationality:
+          type: string
+        email:
+          type: string
+        username:
+          type: string
+      type: object
+    PlatformCompanyCreateLegal:
+      description: |
+        <font size=2>A **legal** is the human legal representative of the company</font>
+
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__nid<sup>*</sup>__: number ID (DNI/NIF)</font>
+        + <font size=2>**firstname**: the first name </font>
+        + <font size=2>**lastname**: the last name</font>
+        + <font size=2>**birthday**:  the birthday</font>
+        + <font size=2>**residence**: the tax residence</font>
+        + <font size=2>**nationality**: the nationality. See [Countries/Get Countries](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getCountries) to check the available countries</font>
+        + <font size=2>**email**:  the email</font>
+        + <font size=2>**street**: the street</font>
+        + <font size=2>**other**:  other relevant information for the address</font>
+        + <font size=2>**postalcode**: the postal code</font>
+        + <font size=2>**city**: the city</font>
+        + <font size=2>**country**:  the country. See [Countries/Get Countries](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getCountries) to check the available countries</font>
+
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        nid:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        brithday:
+          format: date-time
+          type: string
+        residence:
+          type: string
+        nationality:
+          type: string
+        email:
+          type: string
+        street:
+          type: string
+        other:
+          type: string
+        postalcode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+      type: object
+    PlatformCompanyCreateWrapper:
+      properties:
+        company:
+          $ref: '#/components/schemas/PlatformCompanyCreate'
+        legal:
+          $ref: '#/components/schemas/PlatformCompanyCreateLegal'
+        admin:
+          $ref: '#/components/schemas/PlatformCompanyCreateAdmin'
+      required:
+      - admin
+      - company
+      - legal
+      type: object
+    PlatformCampaignCreate:
+      description: |
+        <details>
+          <summary>**Body Parameters**</summary>
+
+        + <font size=2>__title<sup>*</sup>__: the name</font>
+        + <font size=2>**description**: a description</font>
+        + <font size=2>**startdate**: the date the campaign start to be available</font>
+        + <font size=2>**enddate**:  the day the campaign ends to be available</font>
+        + <font size=2>**videoUrl**: the url video related with the campaign</font>
+        + <font size=2>**vouchers**: list settings for the voucher:</font>
+            + **counter**: the number of vouchers
+            + **value**: the amount of each voucher
+            + **currency**: the currency of the amount. See [Utils/Get Currencies](/backend/swagger/swagger-ui/index.html?configUrl=%2Fbackend%2Fswagger%2Fv3%2Fapi-docs%2Fswagger-config&urls.primaryName=platform#/Utils/getCurrencies) to check the available currencies
+
+
+
+
+        <font size=2>**<sup>*</sup>** required
+
+        </details>
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        startdate:
+          format: date-time
+          type: string
+        enddate:
+          format: date-time
+          type: string
+        videoUrl:
+          type: string
+        vouchers:
+          items:
+            $ref: '#/components/schemas/PlatformCampaignVoucher'
+          type: array
+      required:
+      - vouchers
+      type: object
+    PlatformCampaignCreateWrapper:
+      properties:
+        campaign:
+          $ref: '#/components/schemas/PlatformCampaignCreate'
+        primaryImage:
+          format: binary
+          type: string
+        secondaryImage:
+          format: binary
+          type: string
+      required:
+      - campaign
+      - primaryImage
+      - secondaryImage
+      type: object
+    PlatformCampaignVoucher:
+      properties:
+        counter:
+          format: int32
+          type: integer
+        value:
+          format: int32
+          type: integer
+        currency:
+          type: string
+      required:
+      - counter
+      - value
+      type: object
+    SecurityUser:
+      example:
+        roles:
+        - roles
+        - roles
+        jwtToken: jwtToken
+        platform: platform
+      properties:
+        jwtToken:
+          type: string
+        platform:
+          type: string
+        roles:
+          items:
+            type: string
+          type: array
+      type: object
+    PlatformVoucher:
+      example:
+        amount: 0.8008281904610115
+        currency: currency
+        id: id
+        token: token
+        status: status
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        status:
+          type: string
+        amount:
+          format: double
+          type: number
+        currency:
+          type: string
+      type: object
+    ApiSort:
+      example:
+        criteria: criteria
+        parameter: parameter
+      properties:
+        parameter:
+          type: string
+        criteria:
+          type: string
+      type: object
+    Pagination:
+      example:
+        pages: 6
+        size: 1
+        elements: 5
+        sort:
+          criteria: criteria
+          parameter: parameter
+      properties:
+        pages:
+          format: int32
+          type: integer
+        size:
+          format: int32
+          type: integer
+        elements:
+          format: int64
+          type: integer
+        sort:
+          $ref: '#/components/schemas/ApiSort'
+      type: object
+    PlatformVoucherItem:
+      example:
+        amount: 0.8008281904610115
+        currency: currency
+        id: id
+        token: token
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        amount:
+          format: double
+          type: number
+        currency:
+          type: string
+      type: object
+    PlatformVoucherItemWrapper:
+      example:
+        pagination:
+          pages: 6
+          size: 1
+          elements: 5
+          sort:
+            criteria: criteria
+            parameter: parameter
+        items:
+        - amount: 0.8008281904610115
+          currency: currency
+          id: id
+          token: token
+        - amount: 0.8008281904610115
+          currency: currency
+          id: id
+          token: token
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/PlatformVoucherItem'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      type: object
+    PlatformZone:
+      example:
+        name: name
+        value: value
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+      type: object
+    PlatformRole:
+      example:
+        value: value
+      properties:
+        value:
+          type: string
+      type: object
+    PlatformLanguage:
+      example:
+        code: code
+        name: name
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+      type: object
+    PlatformCurrency:
+      example:
+        symbol: symbol
+        code: code
+        name: name
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        symbol:
+          type: string
+      type: object
+    PlatformCountry:
+      example:
+        code: code
+        name: name
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+      type: object
+    PlatformUserItem:
+      example:
+        firstname: firstname
+        roles:
+        - roles
+        - roles
+        id: id
+        email: email
+        token: token
+        lastname: lastname
+        status: status
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        status:
+          type: string
+        roles:
+          items:
+            type: string
+          type: array
+      type: object
+    PlatformUserItemWrapper:
+      example:
+        pagination:
+          pages: 6
+          size: 1
+          elements: 5
+          sort:
+            criteria: criteria
+            parameter: parameter
+        items:
+        - firstname: firstname
+          roles:
+          - roles
+          - roles
+          id: id
+          email: email
+          token: token
+          lastname: lastname
+          status: status
+        - firstname: firstname
+          roles:
+          - roles
+          - roles
+          id: id
+          email: email
+          token: token
+          lastname: lastname
+          status: status
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/PlatformUserItem'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      type: object
+    PlatformTopicItem:
+      example:
+        id: id
+        title: title
+        token: token
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        title:
+          type: string
+      type: object
+    PlatformTopicItemWrapper:
+      example:
+        pagination:
+          pages: 6
+          size: 1
+          elements: 5
+          sort:
+            criteria: criteria
+            parameter: parameter
+        items:
+        - id: id
+          title: title
+          token: token
+        - id: id
+          title: title
+          token: token
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/PlatformTopicItem'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      type: object
+    PlatformTopic:
+      example:
+        description: description
+        id: id
+        title: title
+        logoToken: logoToken
+        token: token
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        title:
+          type: string
+        logoToken:
+          type: string
+        description:
+          type: string
+      type: object
+    PlatformSectorItem:
+      example:
+        id: id
+        title: title
+        token: token
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        title:
+          type: string
+      type: object
+    PlatformSectorItemWrapper:
+      example:
+        pagination:
+          pages: 6
+          size: 1
+          elements: 5
+          sort:
+            criteria: criteria
+            parameter: parameter
+        items:
+        - id: id
+          title: title
+          token: token
+        - id: id
+          title: title
+          token: token
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/PlatformSectorItem'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      type: object
+    PlatformSector:
+      example:
+        id: id
+        title: title
+        token: token
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        title:
+          type: string
+      type: object
+    PlatformProjectItem:
+      example:
+        country: country
+        primaryImageToken: primaryImageToken
+        description: description
+        currency: currency
+        id: id
+        title: title
+        token: token
+        status: status
+        budget: 0.8008281904610115
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+        primaryImageToken:
+          type: string
+        country:
+          type: string
+        budget:
+          format: double
+          type: number
+        currency:
+          type: string
+      type: object
+    PlatformProjectItemWrapper:
+      example:
+        pagination:
+          pages: 6
+          size: 1
+          elements: 5
+          sort:
+            criteria: criteria
+            parameter: parameter
+        items:
+        - country: country
+          primaryImageToken: primaryImageToken
+          description: description
+          currency: currency
+          id: id
+          title: title
+          token: token
+          status: status
+          budget: 0.8008281904610115
+        - country: country
+          primaryImageToken: primaryImageToken
+          description: description
+          currency: currency
+          id: id
+          title: title
+          token: token
+          status: status
+          budget: 0.8008281904610115
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/PlatformProjectItem'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      type: object
+    PlatformInvoiceItem:
+      example:
+        number: number
+        amounts:
+          key: amounts
+        id: id
+        token: token
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        number:
+          type: string
+        amounts:
+          additionalProperties:
+            type: string
+          type: object
+      type: object
+    PlatformInvoiceItemWrapper:
+      example:
+        pagination:
+          pages: 6
+          size: 1
+          elements: 5
+          sort:
+            criteria: criteria
+            parameter: parameter
+        items:
+        - number: number
+          amounts:
+            key: amounts
+          id: id
+          token: token
+        - number: number
+          amounts:
+            key: amounts
+          id: id
+          token: token
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/PlatformInvoiceItem'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      type: object
+    PlatformInvoice:
+      example:
+        number: number
+        entries:
+          key:
+          - concept: concept
+            taxes:
+              value: value
+              key: key
+            units: 0
+            base:
+              value: value
+              key: key
+          - concept: concept
+            taxes:
+              value: value
+              key: key
+            units: 0
+            base:
+              value: value
+              key: key
+        enddate: 2000-01-23T04:56:07.000+00:00
+        clientName: clientName
+        id: id
+        startdate: 2000-01-23T04:56:07.000+00:00
+        issuedate: 2000-01-23T04:56:07.000+00:00
+        clientAddress: clientAddress
+        token: token
+        clientVat: clientVat
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        number:
+          type: string
+        startdate:
+          format: date-time
+          type: string
+        enddate:
+          format: date-time
+          type: string
+        issuedate:
+          format: date-time
+          type: string
+        clientName:
+          type: string
+        clientVat:
+          type: string
+        clientAddress:
+          type: string
+        entries:
+          additionalProperties:
+            items:
+              $ref: '#/components/schemas/PlatformInvoiceEntry'
+            type: array
+          type: object
+      type: object
+    PlatformInvoiceEntry:
+      example:
+        concept: concept
+        taxes:
+          value: value
+          key: key
+        units: 0
+        base:
+          value: value
+          key: key
+      properties:
+        concept:
+          type: string
+        units:
+          format: int32
+          type: integer
+        base:
+          $ref: '#/components/schemas/PlatformInvoiceEntry_base'
+        taxes:
+          $ref: '#/components/schemas/PlatformInvoiceEntry_base'
+      type: object
+    PlatformCampaignItem:
+      example:
+        primaryImageToken: primaryImageToken
+        description: description
+        id: id
+        title: title
+        vouchers: 0
+        token: token
+        budget: 6.027456183070403
+        status: status
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        vouchers:
+          format: int32
+          type: integer
+        budget:
+          format: double
+          type: number
+        status:
+          type: string
+        primaryImageToken:
+          type: string
+      type: object
+    PlatformCampaignItemWrapper:
+      example:
+        pagination:
+          pages: 6
+          size: 1
+          elements: 5
+          sort:
+            criteria: criteria
+            parameter: parameter
+        items:
+        - primaryImageToken: primaryImageToken
+          description: description
+          id: id
+          title: title
+          vouchers: 0
+          token: token
+          budget: 6.027456183070403
+          status: status
+        - primaryImageToken: primaryImageToken
+          description: description
+          id: id
+          title: title
+          vouchers: 0
+          token: token
+          budget: 6.027456183070403
+          status: status
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/PlatformCampaignItem'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      type: object
+    PlatformAssetItem:
+      example:
+        id: id
+        title: title
+        token: token
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        title:
+          type: string
+      type: object
+    PlatformAssetItemWrapper:
+      example:
+        pagination:
+          pages: 6
+          size: 1
+          elements: 5
+          sort:
+            criteria: criteria
+            parameter: parameter
+        items:
+        - id: id
+          title: title
+          token: token
+        - id: id
+          title: title
+          token: token
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/PlatformAssetItem'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      type: object
+    PlatformAsset:
+      example:
+        file:
+        - file
+        - file
+        id: id
+        title: title
+        token: token
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+        title:
+          type: string
+        file:
+          items:
+            format: byte
+            type: string
+          type: array
+      type: object
+    PlatformInvoiceEntry_base:
+      example:
+        value: value
+        key: key
+      properties:
+        value:
+          type: string
+        key:
+          type: string
+      type: object
+  securitySchemes:
+    BasicAuthentication:
+      description: basic autentication form
+      scheme: basic
+      type: http
+    BearerAuthentication:
+      description: JWT autentication form
+      scheme: bearer
+      type: http
+
